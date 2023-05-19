@@ -1,6 +1,8 @@
-const setIdsAndSortPrice = (arrayProduct) => {
+import stock from "../../database/stock.js";
 
-    let arrayReverse = arrayProduct.sort((a, b) => {
+const setIdsAndSortPrice = () => {
+
+    const arrayReverse = stock.sort((a, b) => {
         const priceA = a.price;
         const priceB = b.price;
 
@@ -16,7 +18,8 @@ const setIdsAndSortPrice = (arrayProduct) => {
 
     const newArray = arrayReverse.map((e, id) => ({ ...e, id: id + 1 }));
 
-    return newArray;
+    return newArray
 };
+
 
 export default setIdsAndSortPrice

@@ -1,41 +1,224 @@
 import imageUpdateProduct from "./src/assets/links/imageUpdateProduct.js";
 import { createModal, createTableRow } from "./src/components/index.js";
-import { formattedPrice, setIdsAndSortPrice, } from "./src/utils/index.js";
-import stock from "./src/database/stock.js";
-import { bodyHtml, btnRegisterProd, divTable, keysStock, sectionHtml } from "./src/global/variables/variables.js";
-import { updateModel } from "./src/services/index.js";
+import { formattedPrice, setIdsAndSortPrice } from "./src/utils/index.js";
+import {
+    bodyHtml,
+    btnRegisterProd,
+    divTable,
+    keysStock,
+    sectionHtml
+} from "./src/global/variables/variables.js";
+import { updateProduct } from "./src/services/index.js";
+
+const arrayStock = setIdsAndSortPrice();
+let newArray = [];
+
+const createTable = () => {
+    const table = document.createElement("table");
+    const thead = document.createElement("thead");
+
+    keysStock.forEach((e) => {
+        const th = document.createElement("th");
+        th.textContent = e;
+        thead.append(th);
+    });
+
+    table.append(thead);
+
+    [...arrayStock, ...newArray].forEach(
+        ({ name, quantity, category, price, availability, id }) => {
+            const {
+                buttonDelete,
+                tbody,
+                tdName,
+                tdCategory,
+                tdQuantity,
+                tdPrice,
+                tdAvailability,
+                img,
+                buttonUpdateOpenModal
+            } = createTableRow();
+
+            img.src = imageUpdateProduct;
+            buttonDelete.textContent = "delete";
+            buttonUpdateOpenModal.append(img);
+
+            buttonUpdateOpenModal.addEventListener("click", () => {
+
+                const {
+                    inputPrice,
+                    bgModal,
+                    form,
+                    inputCategory,
+                    inputName,
+                    inputQuantity,
+                    labelName,
+                    labelCategory,
+                    labelQuantity,
+                    labelPrice,
+                    buttonUpdateModal
+                } = createModal();
+
+                inputName.defaultValue = `${name}`;
+                inputQuantity.defaultValue = `${quantity}`;
+                inputCategory.defaultValue = `${category}`;
+                inputPrice.defaultValue = price;
+
+                labelName.textContent = "Name";
+                labelCategory.textContent = "Category";
+                labelQuantity.textContent = "Quantity";
+                labelPrice.textContent = "Price";
+                buttonUpdateModal.textContent = "update";
+
+                bgModal.setAttribute("id", "bgModal");
+                form.setAttribute("id", "formModal");
+                buttonUpdateModal.setAttribute("id", "btnModalUpdate");
+
+                const removeModal = () => {
+                    bgModal.remove();
+                    form.remove();
+                };
+
+                bgModal.addEventListener("click", removeModal);
+
+                form.addEventListener("submit", (e) => {
+                    e.preventDefault();
+
+                    const valueName = inputName.value;
+                    const valueCategory = inputCategory.value;
+                    const valueQuantity = inputQuantity.value;
+                    const valuePrice = inputPrice.value;
+
+                    const valueQuantityFormatted = parseInt(valueQuantity);
+                    const valuePriceFormattedString = valuePrice.replace("R$", "");
+                    const valuePriceFormattedNumber = parseInt(valuePriceFormattedString);
+
+                    const resultUpdateModel = updateProduct({
+                        id,
+                        valueName,
+                        valueCategory,
+                        valueQuantityFormatted,
+                        valuePriceFormattedNumber,
+                        valueQuantityFormatted
+                    });
+
+                    const {
+                        category,
+                        quantity,
+                        name,
+                        price,
+                        availability
+                    } = resultUpdateModel;
+
+                    const responseFormattedPrice = formattedPrice(price);
+
+                    tdPrice.textContent = responseFormattedPrice;
+                    tdName.textContent = name;
+                    tdCategory.textContent = category;
+                    tdQuantity.textContent = quantity;
+                    tdAvailability.textContent = availability;
+
+                    tbody.append(
+                        tdName,
+                        tdCategory,
+                        tdQuantity,
+                        tdPrice,
+                        tdAvailability,
+                        buttonUpdateOpenModal,
+                        buttonDelete
+                    );
+
+                    table.append(tbody);
+                    divTable.append(table);
+                    sectionHtml.append(divTable);
+
+                    removeModal();
+
+                    alert("Product has been updated successfully!");
+                });
+
+                form.append(
+                    labelName,
+                    inputName,
+                    labelCategory,
+                    inputCategory,
+                    labelQuantity,
+                    inputQuantity,
+                    labelPrice,
+                    inputPrice,
+                    buttonUpdateModal
+                );
+
+                bodyHtml.append(form);
+                bodyHtml.append(bgModal);
+            });
+
+            tbody.id = id;
+            buttonDelete.id = id;
+            buttonDelete.className = "btnDelete";
+
+            buttonDelete.addEventListener("click", (e) => {
+                newArray.splice(newArray.findIndex(item => item.id === id), 1);
+                tbody.remove();
+            });
+
+            const responseFormattedPrice = formattedPrice(price);
+
+            tdPrice.textContent = responseFormattedPrice;
+            tdName.textContent = name;
+            tdCategory.textContent = category;
+            tdQuantity.textContent = quantity;
+            tdAvailability.textContent = availability;
+
+            tbody.append(
+                tdName,
+                tdCategory,
+                tdQuantity,
+                tdPrice,
+                tdAvailability,
+                buttonUpdateOpenModal,
+                buttonDelete
+            );
+
+            table.append(tbody);
+        }
+    );
+
+    divTable.append(table);
+    sectionHtml.append(divTable);
+};
+
+createTable();
 
 btnRegisterProd.addEventListener("click", () => {
-
     const {
         inputPrice,
-        bgModal, form,
-        inputCategory, inputName,
+        bgModal,
+        form,
+        inputCategory,
+        inputName,
         inputQuantity,
         labelName,
         labelCategory,
         labelQuantity,
         labelPrice,
         buttonRegisterModal,
-    } = createModal()
+        removeFormAndModal
+    } = createModal();
 
-    const removeFormAndModal = document.createElement("span");
+    inputName.defaultValue = "";
+    inputQuantity.defaultValue = "";
+    inputCategory.defaultValue = "";
+    inputPrice.defaultValue = "";
 
-    inputName.defaultValue = ``;
-    inputQuantity.defaultValue = ``;
-    inputCategory.defaultValue = ``;
-    inputPrice.defaultValue = ``
-
-    labelName.innerText = "Name";
-    labelCategory.innerText = "Category";
-    labelQuantity.innerText = "Quantity";
-    labelPrice.innerText = "Price";
-    removeFormAndModal.innerText = "X";
-
-    buttonRegisterModal.innerText = "Register product";
+    labelName.textContent = "Name";
+    labelCategory.textContent = "Category";
+    labelQuantity.textContent = "Quantity";
+    labelPrice.textContent = "Price";
+    buttonRegisterModal.textContent = "Register product";
 
     bgModal.setAttribute("id", "bgModal");
-    removeFormAndModal.setAttribute("id", "btnRemoveFormAndModal");
+    form.setAttribute("id", "formModal");
     buttonRegisterModal.setAttribute("id", "btnModalUpdate");
 
     const removeModal = () => {
@@ -46,150 +229,100 @@ btnRegisterProd.addEventListener("click", () => {
     bgModal.addEventListener("click", removeModal);
     removeFormAndModal.addEventListener("click", removeModal);
 
-    form.append(
-        labelName, inputName,
-        labelCategory, inputCategory,
-        labelQuantity, inputQuantity,
-        labelPrice, inputPrice,
-        buttonRegisterModal,
-        removeFormAndModal
-    );
-
     form.addEventListener("submit", (e) => {
-        e.preventDefault()
+        e.preventDefault();
 
-        const table = document.querySelector("table")
+        const table = document.querySelector("table");
 
-        const valueName = inputName.value
-        const valueCategory = inputCategory.value
-        const valueQuantity = inputQuantity.value
-        const valuePrice = inputPrice.value
+        const valueName = inputName.value;
+        const valueCategory = inputCategory.value;
+        const valueQuantity = inputQuantity.value;
+        const valuePrice = inputPrice.value;
 
-        if (typeof parseInt(valueQuantity) !== "number" || typeof parseInt(valuePrice) !== "number") {
-            alert("These fields are just numbers!")
+        if (
+            typeof parseInt(valueQuantity) !== "number" ||
+            typeof parseInt(valuePrice) !== "number"
+        ) {
+            alert("These fields are just numbers!");
         }
 
         const {
             buttonDelete,
-            tbody, tdName,
-            tdCategory, tdQuantity,
-            tdPrice, tdAvailability,
-            img, buttonUpdateOpenModal
+            tbody,
+            tdName,
+            tdCategory,
+            tdQuantity,
+            tdPrice,
+            tdAvailability,
+            img,
+            buttonUpdateOpenModal
         } = createTableRow();
 
-        const arrayStock = setIdsAndSortPrice(stock)
+        let maxId = 0
 
-        const maxId = Math.max(...arrayStock.map(prod => prod.id));
+        const maxIdNewArray = Math.max(...newArray.map((prod) => prod.id))
+
+        if (maxIdNewArray === -Infinity) {
+            maxId = Math.max(...arrayStock.map((prod) => prod.id))
+        } else {
+            maxId = maxIdNewArray
+        }
 
         img.src = imageUpdateProduct;
-        buttonDelete.innerText = "delete";
+        buttonDelete.textContent = "delete";
         buttonUpdateOpenModal.append(img);
 
-        const responseFormattedPrice = formattedPrice(parseInt(valuePrice));
-
-        tdPrice.innerText = `${responseFormattedPrice}`;
-        tdName.innerText = `${valueName}`;
-        tdCategory.innerText = `${valueCategory}`;
-        tdQuantity.innerText = `${valueQuantity}`;
-        tdAvailability.innerText = true;
+        tdPrice.textContent = `${valuePrice}`;
+        tdName.textContent = `${valueName}`;
+        tdCategory.textContent = `${valueCategory}`;
+        tdQuantity.textContent = `${valueQuantity}`;
+        tdAvailability.textContent = true;
 
         const dataRegisterProduct = {
-            "id": maxId + 1,
-            'name': valueName,
-            'category': valueCategory,
-            'quantity': valueQuantity,
-            'price': responseFormattedPrice,
-            'availability': true
-        }
+            name: valueName,
+            category: valueCategory,
+            quantity: valueQuantity,
+            price: responseFormattedPrice,
+            availability: true,
+            id: maxId + 1
+        };
 
-        stock.push(dataRegisterProduct)
+        newArray.push(dataRegisterProduct);
 
-
-        tbody.append(tdName, tdCategory, tdQuantity, tdPrice, tdAvailability, buttonUpdateOpenModal, buttonDelete);
-        table.append(tbody);
-
-
-        alert("Product has been register successfully!!")
-        
-        removeModal()
-
-        localStorage.removeItem("arrayStock")
-
-        const arrayStockNew = setIdsAndSortPrice([...arrayStock, dataRegisterProduct])
-
-        localStorage.setItem("arrayStock", JSON.stringify(arrayStockNew))
-
-    })
-
-    bodyHtml.append(form);
-    bodyHtml.append(bgModal);
-})
-
-
-const createTable = () => {
-
-    const table = document.createElement("table");
-    const thead = document.createElement("thead");
-
-    keysStock.forEach((e) => {
-        const th = document.createElement("th");
-        th.innerText = e;
-        thead.append(th);
-    });
-
-    table.append(thead);
-
-    const arrayStock = setIdsAndSortPrice(stock)
-
-    localStorage.setItem("arrayStock", JSON.stringify(arrayStock))
-
-    JSON.parse(localStorage.getItem("arrayStock")).forEach(({ name, quantity, category, price, availability, id }) => {
-        const {
-            buttonDelete,
-            tbody, tdName,
-            tdCategory, tdQuantity,
-            tdPrice, tdAvailability,
-            img, buttonUpdateOpenModal
-        } = createTableRow();
-        console.log(id)
-        img.src = imageUpdateProduct;
-        buttonDelete.innerText = "delete";
-        buttonUpdateOpenModal.append(img);
+        alert("Product successfully registered!")
 
         buttonUpdateOpenModal.addEventListener("click", () => {
 
             const {
                 inputPrice,
-                bgModal, form,
-                inputCategory, inputName,
+                bgModal,
+                form,
+                inputCategory,
+                inputName,
                 inputQuantity,
                 labelName,
                 labelCategory,
                 labelQuantity,
                 labelPrice,
-                buttonUpdateModal,
-            } = createModal()
+                buttonUpdateModal
+            } = createModal();
 
-            const removeFormAndModal = document.createElement("span");
 
-            inputName.defaultValue = `${name}`;
-            inputQuantity.defaultValue = `${quantity}`;
-            inputCategory.defaultValue = `${category}`;
+            inputName.defaultValue = `${dataRegisterProduct.name}`;
+            inputQuantity.defaultValue = `${dataRegisterProduct.quantity}`;
+            inputCategory.defaultValue = `${dataRegisterProduct.category}`;
 
-            const responseFormattedPrice = formattedPrice(price)
+            const responseFormattedPrice = formattedPrice(dataRegisterProduct.price);
+            inputPrice.defaultValue = responseFormattedPrice;
 
-            inputPrice.defaultValue = responseFormattedPrice
-
-            labelName.innerText = "Name";
-            labelCategory.innerText = "Category";
-            labelQuantity.innerText = "Quantity";
-            labelPrice.innerText = "Price";
-            removeFormAndModal.innerText = "X";
-
-            buttonUpdateModal.innerText = "update";
+            labelName.textContent = "Name";
+            labelCategory.textContent = "Category";
+            labelQuantity.textContent = "Quantity";
+            labelPrice.textContent = "Price";
+            buttonUpdateModal.textContent = "update";
 
             bgModal.setAttribute("id", "bgModal");
-            removeFormAndModal.setAttribute("id", "btnRemoveFormAndModal");
+            form.setAttribute("id", "formModal");
             buttonUpdateModal.setAttribute("id", "btnModalUpdate");
 
             const removeModal = () => {
@@ -198,40 +331,43 @@ const createTable = () => {
             };
 
             bgModal.addEventListener("click", removeModal);
-            removeFormAndModal.addEventListener("click", removeModal);
 
-            form.addEventListener("submit", () => {
+            form.addEventListener("submit", (e) => {
+                e.preventDefault();
 
-                const valueName = inputName.value
-                const valueCategory = inputCategory.value
-                const valueQuantity = inputQuantity.value
-                const valuePrice = inputPrice.value
+                const valueName = inputName.value;
+                const valueCategory = inputCategory.value;
+                const valueQuantity = inputQuantity.value;
+                const valuePrice = inputPrice.value;
 
-                const valueQuantityFormatted = parseInt(valueQuantity)
-                const valuePriceFormattedString = valuePrice.replace("R$", "")
-                const valuePriceFormattedNumber = parseInt(valuePriceFormattedString)
+                const valueQuantityFormatted = parseInt(valueQuantity);
+                const valuePriceFormattedString = valuePrice.replace("R$", "");
+                const valuePriceFormattedNumber = parseInt(valuePriceFormattedString);
 
-
-                const resultUpdateModel = updateModel({
-                    id,
+                const resultUpdateModel = updateProduct({
+                    id: dataRegisterProduct.id,
                     valueName,
                     valueCategory,
                     valueQuantityFormatted,
                     valuePriceFormattedNumber,
                     valueQuantityFormatted
-                })
+                });
 
-                const { id, category, quantity, name, price, availability } = resultUpdateModel
+                const {
+                    category,
+                    quantity,
+                    name,
+                    price,
+                    availability
+                } = resultUpdateModel;
 
                 const responseFormattedPrice = formattedPrice(price);
 
-                tdPrice.innerText = responseFormattedPrice;
-                tdName.innerText = name;
-                tdCategory.innerText = category;
-                tdQuantity.innerText = quantity;
-                tdAvailability.innerText = availability;
-
-                stock.push(dataUpdateProduct)
+                tdPrice.textContent = responseFormattedPrice;
+                tdName.textContent = name;
+                tdCategory.textContent = category;
+                tdQuantity.textContent = quantity;
+                tdAvailability.textContent = availability;
 
                 tbody.append(
                     tdName,
@@ -241,54 +377,72 @@ const createTable = () => {
                     tdAvailability,
                     buttonUpdateOpenModal,
                     buttonDelete
-                )
+                );
 
                 table.append(tbody);
                 divTable.append(table);
                 sectionHtml.append(divTable);
 
-                removeModal()
-                alert("Product has been updated successfully!");
+                removeModal();
 
-            })
+                alert("Product has been updated successfully!");
+            });
 
             form.append(
-                labelName, inputName,
-                labelCategory, inputCategory,
-                labelQuantity, inputQuantity,
-                labelPrice, inputPrice,
-                buttonUpdateModal,
-                removeFormAndModal
+                labelName,
+                inputName,
+                labelCategory,
+                inputCategory,
+                labelQuantity,
+                inputQuantity,
+                labelPrice,
+                inputPrice,
+                buttonUpdateModal
             );
 
             bodyHtml.append(form);
             bodyHtml.append(bgModal);
         });
 
-        buttonDelete.addEventListener("click", () => {
-            JSON.parse(localStorage.getItem("arrayStock")).splice(id, 1)
-            console.log(id)
-            tbody.remove()
-        })
+        tbody.id = dataRegisterProduct.id;
+        buttonDelete.id = dataRegisterProduct.id;
+        buttonDelete.className = "btnDelete";
 
-        const responseFormattedPrice = formattedPrice(price);
+        buttonDelete.addEventListener("click", (e) => {
+            newArray.splice(newArray.findIndex((item) => item.id === dataRegisterProduct.id), 1);
+            tbody.remove();
+        });
 
-        tdPrice.innerText = responseFormattedPrice;
-        tdName.innerText = name;
-        tdCategory.innerText = category;
-        tdQuantity.innerText = quantity;
-        tdAvailability.innerText = availability;
-
-        tbody.append(tdName, tdCategory, tdQuantity, tdPrice, tdAvailability, buttonUpdateOpenModal, buttonDelete);
+        tbody.append(
+            tdName,
+            tdCategory,
+            tdQuantity,
+            tdPrice,
+            tdAvailability,
+            buttonUpdateOpenModal,
+            buttonDelete
+        );
         table.append(tbody);
+
+        removeModal();
     });
 
-    divTable.append(table);
-    sectionHtml.append(divTable);
-};
+    form.append(
+        labelName,
+        inputName,
+        labelCategory,
+        inputCategory,
+        labelQuantity,
+        inputQuantity,
+        labelPrice,
+        inputPrice,
+        buttonRegisterModal,
+        removeFormAndModal
+    );
 
+    bodyHtml.append(form);
+    bodyHtml.append(bgModal);
 
-
-createTable();
+});
 
 

@@ -1,3 +1,3 @@
-import updateModel from "./updateModel/updateModel.js";
+import updateProduct  from "./updateModel/updateModel.js";
 
-export { updateModel }
+export { updateProduct  }

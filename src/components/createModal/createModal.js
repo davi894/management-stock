@@ -13,6 +13,7 @@ const createModal = () => {
     const labelPrice = document.createElement("label");
     const buttonUpdateModal = document.createElement("button");
     const buttonRegisterModal = document.createElement("button");
+    const removeFormAndModal = document.createElement("span");
 
 
 
@@ -28,7 +29,8 @@ const createModal = () => {
         labelQuantity: labelQuantity,
         labelPrice: labelPrice,
         buttonUpdateModal: buttonUpdateModal,
-        buttonRegisterModal: buttonRegisterModal
+        buttonRegisterModal: buttonRegisterModal,
+        removeFormAndModal: removeFormAndModal
     };
 };
 

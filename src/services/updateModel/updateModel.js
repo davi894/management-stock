@@ -1,4 +1,4 @@
-const updateModel = ({ id, valueName, valueCategory, valueQuantityFormatted, valuePriceFormattedNumber }) => {
+const updateProduct  = ({ id, valueName, valueCategory, valueQuantityFormatted, valuePriceFormattedNumber }) => {
     
     if (valueQuantityFormatted >= 0 && valuePriceFormattedNumber >= 0) {
 
@@ -17,4 +17,4 @@ const updateModel = ({ id, valueName, valueCategory, valueQuantityFormatted, val
 
 };
 
-export default updateModel
+export default updateProduct 
