@@ -216,6 +216,7 @@ btnRegisterProd.addEventListener("click", () => {
     labelQuantity.textContent = "Quantity";
     labelPrice.textContent = "Price";
     buttonRegisterModal.textContent = "Register product";
+    buttonRegisterModal.type = "submit"
 
     bgModal.setAttribute("id", "bgModal");
     form.setAttribute("id", "formModal");
@@ -282,7 +283,7 @@ btnRegisterProd.addEventListener("click", () => {
             name: valueName,
             category: valueCategory,
             quantity: valueQuantity,
-            price: responseFormattedPrice,
+            price: valuePrice,
             availability: true,
             id: maxId + 1
         };
