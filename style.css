@@ -52,7 +52,10 @@ header {
     justify-content: space-between;
     align-items: center;
     position: relative;
+    border-radius: 0rem 0rem 0.5rem 0.5rem;
 }
+
+
 
 header div {
     width: 6rem;
@@ -128,6 +131,7 @@ footer {
     display: flex;
     justify-content: space-between;
     background-color: black;
+    border-radius: 0.5rem 0.5rem 0rem 0rem;
 }
 
 a {
