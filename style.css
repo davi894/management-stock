@@ -4,66 +4,63 @@ body {
 }
 
 section {
-    margin-bottom: 6rem;
-    margin-left: 1rem;
-    margin-top: 1rem;
-
+    margin: 1rem 1rem 6rem;
     display: flex;
     justify-content: flex-end;
     flex-direction: row-reverse;
-
 }
 
 table,
 th,
 td {
-    border: 0.1rem solid black;
+    border: 0.2rem solid #9f5302;
     text-align: center;
 }
 
 table {
-    margin-top: 0.5rem;
-    margin-left: 0.5rem;
+    margin: 0.5rem;
     line-height: 1.5rem;
     width: 50%;
     position: relative;
     border-collapse: collapse;
-
     max-height: 300px;
-
     overflow-y: auto;
 }
 
 th,
 td {
-    padding-left: 2rem;
-    padding-right: 2rem;
+    padding: 0 2rem;
+}
+
+td {
+    background-color: #ffa504;
+    font-size: 1rem;
+    font-weight: bold;
 }
 
 thead th {
-    color: rgb(195, 195, 195);
-    background-color: black;
+    color: #ffffff;
+    background-color: #702901;
 }
 
 header {
-    background-color: black;
+    background-color: #400000;
     height: 7rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
     position: relative;
-    border-radius: 0rem 0rem 0.5rem 0.5rem;
+    border-radius: 0 0 0.5rem 0.5rem;
 }
-
-
 
 header div {
     width: 6rem;
-    height: 1rem;
-    right: 1%;
-    top: -11%;
-    position: absolute;
     padding-right: 1rem;
+}
+
+header div img {
+    width: 4rem;
+    height: 4rem;
 }
 
 h1 {
@@ -73,19 +70,20 @@ h1 {
 }
 
 img {
-    width: 2rem;
-    height: 2rem;
+    width: 1.5rem;
+    height: 1.5rem;
 }
 
 button {
     display: flex;
-    width: 3rem;
+    width: 4rem;
     height: 4rem;
-    background-color: transparent;
+    background-color: #cf7c03;
     border: none;
     cursor: pointer;
     justify-content: center;
     align-items: center;
+    border-bottom: 0.2rem solid #9f5302;
 }
 
 #bgModal {
@@ -99,18 +97,16 @@ button {
 }
 
 form {
-    background-color: white;
+    background-color: #fba726;
     position: fixed;
-
     height: 18rem;
     width: 15rem;
-
     padding: 0.5rem;
-
     left: 36%;
     top: 20%;
-
     display: flex;
+    justify-content: center;
+    align-items: center;
     flex-direction: column;
     z-index: 2;
     border-radius: 0.5rem;
@@ -130,23 +126,19 @@ footer {
     position: fixed;
     display: flex;
     justify-content: space-between;
-    background-color: black;
-    border-radius: 0.5rem 0.5rem 0rem 0rem;
+    background-color: #400000;
+    border-radius: 0.5rem 0.5rem 0 0;
 }
 
 a {
-    color: rgb(0, 0, 0);
+    color: #000000;
     text-decoration: none;
     font-size: 2rem;
     font-weight: bolder;
 }
 
-#pageInitial {
-    display: flex;
-    justify-content: center;
-    align-items: end;
-    background-color: rgb(255, 255, 255);
-    border-radius: 100%;
+#pageInitial img {
+    width: 3rem;
     height: 3rem;
 }
 
@@ -155,11 +147,10 @@ input {
     border-radius: 0.4rem;
     border: 0.1rem solid black;
     padding: 0.4rem;
+}
 
-    &:focus {
-        outline: none;
-    }
-
+input:focus {
+    outline: none;
 }
 
 label {
@@ -167,20 +158,18 @@ label {
 }
 
 #btnModalUpdate {
-    width: 100%;
-    padding: 0.5;
+    width: 20%;
     background-color: black;
-    color: rgb(255, 255, 255);
+    color: #ffffff;
     font-size: 1.5rem;
     height: 2rem;
-
     transition: all 0.5s;
+}
 
-    &:hover {
-        background-color: rgb(77, 77, 77);
-        color: rgb(4, 4, 4);
-        border-radius: 1rem;
-    }
+#btnModalUpdate:hover {
+    background-color: #4d4d4d;
+    color: #040404;
+    border-radius: 1rem;
 }
 
 #btnRemoveFormAndModal {
@@ -189,22 +178,17 @@ label {
     width: 1.5rem;
     top: 1%;
     text-align: center;
-    background-color: rgb(3, 3, 3);
+    background-color: #030303;
     border-radius: 1rem;
-    color: white;
+    color: #ffffff;
     cursor: pointer;
     font-weight: bolder;
     transition: all 0.5s;
-
-    &:hover {
-        background-color: rgb(255, 0, 0);
-        color: hsl(0, 0%, 100%);
-    }
 }
 
 #registerProd {
-    background-color: rgb(0, 0, 0);
-    color: white;
+    background-color: #ecac5b;
+    color: #000000;
     width: 9rem;
     border-radius: 0.5rem;
     height: 4rem;
@@ -212,4 +196,9 @@ label {
     font-size: 1rem;
     position: fixed;
     left: 60%;
+}
+
+h1,
+p {
+    color: #78a2d2;
 }

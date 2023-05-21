@@ -14,10 +14,12 @@ const createModal = () => {
     const buttonUpdateModal = document.createElement("button");
     const buttonRegisterModal = document.createElement("button");
     const removeFormAndModal = document.createElement("span");
+    const imgUpdateModal = document.createElement("img")
 
 
 
     return {
+        imgUpdateModal: imgUpdateModal,
         inputCategory: inputCategory,
         inputName: inputName,
         inputQuantity: inputQuantity,

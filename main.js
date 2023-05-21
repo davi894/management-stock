@@ -9,6 +9,8 @@ import {
     sectionHtml
 } from "./src/global/variables/variables.js";
 import { updateProduct } from "./src/services/index.js";
+import imageDeleteProduct from "./src/assets/links/imageDeleteProduct.js";
+import imageBottomUpdateModal from "./src/assets/links/imageBottomUpdateModal.js";
 
 const arrayStock = setIdsAndSortPrice();
 let newArray = [];
@@ -35,13 +37,16 @@ const createTable = () => {
                 tdQuantity,
                 tdPrice,
                 tdAvailability,
-                img,
-                buttonUpdateOpenModal
+                imgUpdate,
+                buttonUpdateOpenModal,
+                imgDelete
             } = createTableRow();
 
-            img.src = imageUpdateProduct;
-            buttonDelete.textContent = "delete";
-            buttonUpdateOpenModal.append(img);
+            imgUpdate.src = imageUpdateProduct;
+            imgDelete.src = imageDeleteProduct;
+
+            buttonDelete.append(imgDelete)
+            buttonUpdateOpenModal.append(imgUpdate);
 
             buttonUpdateOpenModal.addEventListener("click", () => {
 
@@ -56,7 +61,8 @@ const createTable = () => {
                     labelCategory,
                     labelQuantity,
                     labelPrice,
-                    buttonUpdateModal
+                    buttonUpdateModal,
+                    imgUpdateModal
                 } = createModal();
 
                 inputName.defaultValue = `${name}`;
@@ -68,7 +74,10 @@ const createTable = () => {
                 labelCategory.textContent = "Category";
                 labelQuantity.textContent = "Quantity";
                 labelPrice.textContent = "Price";
-                buttonUpdateModal.textContent = "update";
+
+                imgUpdateModal.src = imageBottomUpdateModal
+
+                buttonUpdateModal.append(imgUpdateModal)
 
                 bgModal.setAttribute("id", "bgModal");
                 form.setAttribute("id", "formModal");
@@ -203,6 +212,7 @@ btnRegisterProd.addEventListener("click", () => {
         labelQuantity,
         labelPrice,
         buttonRegisterModal,
+        imgUpdateModal,
         removeFormAndModal
     } = createModal();
 
@@ -215,8 +225,11 @@ btnRegisterProd.addEventListener("click", () => {
     labelCategory.textContent = "Category";
     labelQuantity.textContent = "Quantity";
     labelPrice.textContent = "Price";
-    buttonRegisterModal.textContent = "Register product";
     buttonRegisterModal.type = "submit"
+
+    imgUpdateModal.src = imageBottomUpdateModal
+
+    buttonRegisterModal.append(imgUpdateModal)
 
     bgModal.setAttribute("id", "bgModal");
     form.setAttribute("id", "formModal");
@@ -255,8 +268,9 @@ btnRegisterProd.addEventListener("click", () => {
             tdQuantity,
             tdPrice,
             tdAvailability,
-            img,
-            buttonUpdateOpenModal
+            imgUpdate,
+            buttonUpdateOpenModal,
+            imgDelete
         } = createTableRow();
 
         let maxId = 0
@@ -269,9 +283,11 @@ btnRegisterProd.addEventListener("click", () => {
             maxId = maxIdNewArray
         }
 
-        img.src = imageUpdateProduct;
-        buttonDelete.textContent = "delete";
-        buttonUpdateOpenModal.append(img);
+        imgUpdate.src = imageUpdateProduct;
+        imgDelete.src = imageDeleteProduct;
+
+        buttonDelete.append(imgDelete)
+        buttonUpdateOpenModal.append(imgUpdate);
 
         tdPrice.textContent = `${valuePrice}`;
         tdName.textContent = `${valueName}`;
@@ -305,7 +321,8 @@ btnRegisterProd.addEventListener("click", () => {
                 labelCategory,
                 labelQuantity,
                 labelPrice,
-                buttonUpdateModal
+                buttonUpdateModal,
+                imgUpdateModal
             } = createModal();
 
 
@@ -320,7 +337,9 @@ btnRegisterProd.addEventListener("click", () => {
             labelCategory.textContent = "Category";
             labelQuantity.textContent = "Quantity";
             labelPrice.textContent = "Price";
-            buttonUpdateModal.textContent = "update";
+            imgUpdateModal.src = imageBottomUpdateModal
+
+            buttonUpdateModal.append(imgUpdateModal)
 
             bgModal.setAttribute("id", "bgModal");
             form.setAttribute("id", "formModal");
@@ -408,6 +427,7 @@ btnRegisterProd.addEventListener("click", () => {
         tbody.id = dataRegisterProduct.id;
         buttonDelete.id = dataRegisterProduct.id;
         buttonDelete.className = "btnDelete";
+
 
         buttonDelete.addEventListener("click", (e) => {
             newArray.splice(newArray.findIndex((item) => item.id === dataRegisterProduct.id), 1);
